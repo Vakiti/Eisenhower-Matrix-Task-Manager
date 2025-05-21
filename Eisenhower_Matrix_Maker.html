@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eisenhower Matrix</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Volkhov&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #c292a1;
+            font-family: 'Volkhov', serif;
+            color: #f5f5dc;
+        }
+        .title {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 26px;
+        }
+        .download-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #874c62;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 100px;
+        }
+        h2 {
+            font-size: 18px;
+        }
+        .eisenhower-matrix {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+            margin: 40px;
+        }
+        .quadrant {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #000000;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .quadrant-label {
+            background-color: #c292a1;
+            padding: 10px 10px 20px 10px;
+            text-align: center;
+            color: #f5f5dc;
+            border-bottom: none;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            font-size: 16px;
+        }
+        .quadrant-container {
+            display: flex;
+            flex-direction: column;
+        }
+        .input-box {
+            background-color: #ffffff;
+            padding: 10px;
+            border: 1px solid #000000;
+            border-radius: 10px;
+            width: 500px;
+            height: 200px;
+            color: #000000; 
+        }
+        .task-input-box {
+            background-color: #ffffff;
+            padding: 10px;
+            border: 1px solid #000000;
+            border-radius: 10px;
+            width: 500px;
+            height: 50px;
+            color: #000000; 
+        }
+        .goal-item {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            color: #000000;
+        }
+        .solidified-goal {
+            color: #000000;
+        }
+        #quadrant-1-tasks, #quadrant-2-tasks, #quadrant-3-tasks, #quadrant-4-tasks {
+            color: #000000;
+        }
+        #goal-input::placeholder {
+            color: grey;
+        }
+        .restart-text {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 12px;
+            color: #f5f5dc;
+            font-family: 'Volkhov', serif;
+        }
+        .good-luck-text {
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            color: #f5f5dc;
+            font-family: 'Volkhov', serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">What does Eisenhower say?</div>
+    <button class="download-button" id="download-button">Download Goal History</button>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Enter Today's Goals</h2>
+                <div id="goals-container"></div>
+                <textarea id="goal-input" class="input-box" placeholder="Enter whatever you wish to accomplish today"></textarea>
+            </div>
+            <div class="col-md-6">
+                <h2>Enter Daily Tasks</h2>
+                <div id="tasks-container">
+                    <input class="task-input-box" type="text" id="task-input" placeholder="Enter task">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="relevance-checkbox">
+                        <label class="form-check-label" for="relevance-checkbox">Urgent</label>
+                    </div>
+                    <select id="relevance-score">
+                        <option value="0">Not Very Relevant</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <label for="relevance-score">Relevance</label>
+                    <button id="add-task-button">Add Task</button>
+                </div>
+                <div id="tasks-list"></div>
+            </div>
+        </div>
+        <div class="eisenhower-matrix">
+            <div class="quadrant-container">
+                <div class="quadrant-label">Urgent and Important</div>
+                <div class="quadrant">
+                    <ul id="quadrant-1-tasks"></ul>
+                </div>
+            </div>
+            <div class="quadrant-container">
+                <div class="quadrant-label">Urgent but Not Important</div>
+                <div class="quadrant">
+                    <ul id="quadrant-2-tasks"></ul>
+                </div>
+            </div>
+            <div class="quadrant-container">
+                <div class="quadrant-label">Important but Not Urgent</div>
+                <div class="quadrant">
+                    <ul id="quadrant-3-tasks"></ul>
+                </div>
+            </div>
+            <div class="quadrant-container">
+                <div class="quadrant-label">Not Urgent and Not Important</div>
+                <div class="quadrant">
+                    <ul id="quadrant-4-tasks"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="restart-text">Wanna start over? Just reload the page</div>
+    <div class="good-luck-text">Good Luck :)</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script>
+        let tasks = [];
+        let goals = [];
+
+        document.getElementById('add-task-button').addEventListener('click', addTask);
+        document.getElementById('download-button').addEventListener('click', downloadGoalHistory);
+        document.getElementById('goal-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addGoal();
+            }
+        });
+
+        function addTask() {
+            const taskInput = document.getElementById('task-input');
+            const task = taskInput.value;
+            const relevanceCheckbox = document.getElementById('relevance-checkbox');
+            const relevanceScore = document.getElementById('relevance-score');
+            let relevance = parseInt(relevanceScore.value);
+            let isUrgent = relevanceCheckbox.checked;
+            tasks.push({ task, relevance, isUrgent });
+            taskInput.value = '';
+            relevanceCheckbox.checked = false;
+            relevanceScore.value = '0';
+            updateTasksList();
+            updateEisenhowerMatrix();
+        }
+
+        function updateTasksList() {
+            const tasksList = document.getElementById('tasks-list');
+            tasksList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const taskElement = document.createElement('li');
+                taskElement.textContent = `${task.task} (Relevance: ${task.relevance}, Urgent: ${task.isUrgent})`;
+                tasksList.appendChild(taskElement);
+            });
+        }
+
+        function updateEisenhowerMatrix() {
+            const quadrant1Tasks = document.getElementById('quadrant-1-tasks');
+            const quadrant2Tasks = document.getElementById('quadrant-2-tasks');
+            const quadrant3Tasks = document.getElementById('quadrant-3-tasks');
+            const quadrant4Tasks = document.getElementById('quadrant-4-tasks');
+            quadrant1Tasks.innerHTML = '';
+            quadrant2Tasks.innerHTML = '';
+            quadrant3Tasks.innerHTML = '';
+            quadrant4Tasks.innerHTML = '';
+            tasks.forEach((task) => {
+                if (task.relevance >= 4 && task.isUrgent) {
+                    const taskElement = document.createElement('li');
+                    taskElement.textContent = task.task;
+                    quadrant1Tasks.appendChild(taskElement);
+                } else if (task.relevance < 4 && task.isUrgent) {
+                    const taskElement = document.createElement('li');
+                    taskElement.textContent = task.task;
+                    quadrant2Tasks.appendChild(taskElement);
+                } else if (task.relevance >= 4 && !task.isUrgent) {
+                    const taskElement = document.createElement('li');
+                    taskElement.textContent = task.task;
+                    quadrant3Tasks.appendChild(taskElement);
+                } else if (task.relevance < 4 && !task.isUrgent) {
+                    const taskElement = document.createElement('li');
+                    taskElement.textContent = task.task;
+                    quadrant4Tasks.appendChild(taskElement);
+                }
+            });
+        }
+
+        function addGoal() {
+            const goalInput = document.getElementById('goal-input');
+            let goalText = goalInput.value.trim();
+            if (goalText && goalText !== 'Enter whatever you wish to accomplish today') {
+                goals.push(goalText);
+                const goalElement = document.createElement('div');
+                goalElement.textContent = goalText;
+                goalElement.className = 'goal-item';
+                goalElement.contentEditable = 'true';
+                goalElement.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        solidifyGoal(goalElement);
+                    }
+                });
+                goalElement.addEventListener('dblclick', () => {
+                    goalElement.contentEditable = 'true';
+                    goalElement.focus();
+                    document.execCommand('selectAll', false, null);
+                });
+                document.getElementById('goals-container').appendChild(goalElement);
+                goalInput.value = '';
+            } else {
+                goalInput.value = '';
+            }
+        }
+
+        function solidifyGoal(goalElement) {
+            goalElement.contentEditable = 'false';
+            goalElement.className = 'goal-item solidified-goal';
+        }
+
+        function downloadGoalHistory() {
+            let data = [];
+            goals.forEach((goal, index) => {
+                data.push({
+                    Date: new Date().toLocaleDateString(),
+                    Goals: goal,
+                    Tasks: '',
+                    'Relevance Score or Indicator': ''
+                });
+            });
+            tasks.forEach((task, index) => {
+                data.push({
+                    Date: new Date().toLocaleDateString(),
+                    Goals: '',
+                    Tasks: task.task,
+                    'Relevance Score or Indicator': task.relevance
+                });
+            });
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Goal History');
+            XLSX.writeFile(workbook, 'goal_history.xlsx');
+        }
+    </script>
+</body>
+</html>
