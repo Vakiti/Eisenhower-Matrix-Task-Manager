@@ -1,5 +1,7 @@
 # Eisenhower-Matrix-Task-Manager
 A lightweight web app to organize your daily tasks based on the Eisenhower Matrix — categorizing tasks by urgency and importance to help prioritize effectively.
+![Eisenhower Matrix Output](Final_Eisenhower_Output.png)
+
 
 ## Features
 
